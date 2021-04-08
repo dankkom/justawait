@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="bigdisplay">⏳</div>
+<div id="smalldisplay"></div>
+<button id="create-justawait">Click</button>
+<div id="justawait-info"></div>
+<script>
+    function randomColor() {
+        const colors = [
+            "#888888",
+            "#8888FF",
+            "#88FF88",
+            "#88FFFF",
+            "#FF8888",
+            "#FF88FF",
+            "#FFFF88",
+            "#FFFFFF",
+        ];
+        let c = colors[Math.floor(Math.random() * (colors.length + 1))];
+        return c;
+    };
+    function createJustAwait() {
+        fetch("{{ url_for('justawait') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({msg: "Wow!"}),
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            document.querySelector("#bigdisplay").innerText = data.msg;
+            document.querySelector("#smalldisplay").innerText = data.detail;
+            document.querySelector("#justawait-info").innerText = data.info;
+        })
+        .catch(error => console.log(error));
+    };
+
+    document.querySelector("#create-justawait").addEventListener("click", function (e) {
+        document.querySelector("body").style.backgroundColor = randomColor();
+        createJustAwait();
+    });
+</script>
+{% endblock %}
